@@ -1,3 +1,51 @@
+# Shadow City
+
+See a familiar city from the sun's point of view. Shadow City shows OpenStreetMap buildings and trees in 3D and casts their real shadows for any time and date, so you can find the benches, terraces, beaches and viewpoints that are in the sun.
+
+## How to run
+
+Requires Node.js 20.19 or newer (or 22.12+) and an internet connection.
+
+```sh
+npm install
+npm run dev
+```
+
+Then open http://localhost:5173.
+
+To build and preview the production version:
+
+```sh
+npm run build
+npm run preview
+```
+
+The preview runs at http://localhost:4173. The built site in `dist/` must be served over HTTP; opening `dist/index.html` directly from disk does not work.
+
+## Usage
+
+- Central Helsinki loads on start. Search for a place in the top bar, or pan and zoom: buildings and places load automatically when the map stops moving (at zoom level 14 or closer).
+- Drag the time slider, pick a date, or press Now. The play button runs a time-lapse through the day and night, and the calendar button plays the whole year at the selected time of day. Midsummer, Equinox and Midwinter jump to those dates.
+- Places in direct sun are highlighted. The sunny spots list shows the nearest ones and can be filtered by type, for example terraces.
+- Click a place to see when it gets sun during the day, along with its opening hours, contact details and Wikipedia summary when available.
+- From the sun moves the camera to the sun's position, so everything you see is lit. Into the sun faces the other way, so everything you see is in shade.
+- Find me sun uses your location to find the nearest place in the sun.
+- Share copies a link to the current view, time and selected place.
+- Keyboard: Space plays or pauses, the left and right arrow keys move the time by 5 minutes, N jumps to now, and 1, 2 and 3 switch the camera view.
+
+## How it works
+
+- Frontend only: Vite, React, TypeScript, Chakra UI and MapLibre GL JS.
+- Data: buildings, trees and places come from OpenStreetMap through the Overpass API. Search uses Nominatim and place summaries come from Wikipedia. The basemap is OpenFreeMap Positron.
+- Sun: SunCalc gives the sun's position for any date and time.
+- Shadows: a building's shadow is the area its footprint covers when moved away from the sun by its height divided by the tangent of the sun's altitude.
+- Sun or shade: a place is in shade if a line from it toward the sun passes through a building or tree that is taller than the line at that point.
+- Building heights come from OpenStreetMap when mapped. Otherwise the height is estimated from the footprint area, up to 9.6 m. Terrain is not modelled.
+
+Map data © OpenStreetMap contributors (ODbL). Basemap © OpenFreeMap and OpenMapTiles.
+
+---
+
 # Softamestari 2026 — esikarsinta on käynnissä
 
 ## Suomeksi
