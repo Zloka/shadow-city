@@ -57,7 +57,14 @@ export function PlaceDetails({ details, date }: PlaceDetailsProps) {
           {address && <Fact icon={MapPin}>{address}</Fact>}
           {website && (
             <Fact icon={Globe}>
-              <Link href={website} target="_blank" rel="noreferrer" color="orange.600" truncate>
+              {/* OSM websites are often tagged without a protocol, which would make a relative link. */}
+              <Link
+                href={/^https?:\/\//i.test(website) ? website : `https://${website}`}
+                target="_blank"
+                rel="noreferrer"
+                color="orange.600"
+                truncate
+              >
                 {website.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '')}
               </Link>
             </Fact>
