@@ -467,8 +467,10 @@ function App() {
       requestedArea.current = loadedArea.current
       toaster.create({
         type: 'error',
-        title: 'Could not load this area',
-        description: error instanceof Error ? error.message : String(error),
+        title: 'Map data is temporarily unavailable',
+        description: `The public OpenStreetMap servers are busy. Try again in a moment with the reload button. (${
+          error instanceof Error ? error.message : String(error)
+        })`,
         closable: true,
       })
       return null

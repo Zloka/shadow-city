@@ -5,8 +5,11 @@ import type { Feature, FeatureCollection, Point, Polygon, Position } from 'geojs
 // server has been timing out after several seconds, which every auto-load would wait for.
 const OVERPASS_URLS = [
   'https://overpass.openstreetmap.fr/api/interpreter',
+  'https://overpass.private.coffee/api/interpreter',
   'https://overpass-api.de/api/interpreter',
 ]
+// A server that hangs would otherwise block the fallbacks behind it indefinitely.
+const SERVER_TIMEOUT_MS = 20_000
 
 const DEFAULT_HEIGHT = 9.6
 const LEVEL_HEIGHT = 3.2
@@ -137,11 +140,12 @@ async function queryOverpass(
 ): Promise<OverpassResponse> {
   let response: Response
   try {
+    const timeout = AbortSignal.timeout(SERVER_TIMEOUT_MS)
     response = await fetch(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       body,
-      signal,
+      signal: signal ? AbortSignal.any([signal, timeout]) : timeout,
     })
   } catch (error) {
     if (signal?.aborted) throw error
